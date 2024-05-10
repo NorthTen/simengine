@@ -1,0 +1,27 @@
+name: simengine
+version: 0.1.0
+
+# authors:
+#   - name <email@example.com>
+
+# description: |
+#   Short description of simengine
+
+dependencies:
+    crystaledge:
+        github: unn4m3d/crystaledge
+        version: ~> 0.2.6
+
+targets:
+    test:
+        main: Crystal/src/test.cr
+
+#   pg:
+#     github: will/crystal-pg
+#     version: "~> 0.5"
+
+# development_dependencies:
+#   webmock:
+#     github: manastech/webmock.cr
+
+# license: MIT

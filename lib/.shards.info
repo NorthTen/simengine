@@ -1,0 +1,6 @@
+---
+version: 1.0
+shards:
+  crystaledge:
+    git: https://github.com/unn4m3d/crystaledge.git
+    version: 0.2.6
