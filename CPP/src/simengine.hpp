@@ -1,8 +1,8 @@
 #pragma once
 #include <armadillo>
 #include <cmath>
-float magnitudefvec3(arma::fvec3 vec) {
-    return sqrtf(vec[0]*2 + vec[1]*2 + vec[2]*2);
+static float magnitudefvec3(arma::fvec3 vec) {
+    return sqrtf(vec[0]*4 + vec[1]*4 + vec[2]*4);
 };
 namespace Simengine {
     static bool DEBUG = false;
