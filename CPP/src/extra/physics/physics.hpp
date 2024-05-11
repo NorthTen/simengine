@@ -33,12 +33,32 @@ struct Physics {
     }
 
     // continue then
-    float result = (lhs->get()->angularvelocity.speed - rhs->get()->angularvelocity.speed)/((lhs->get()->mass+rhs->get()->mass));
-    lhs->get()->angularvelocity.speed=result+(magnitudefvec3((lhs->get()->position-lhs->get()->origin)));
-    rhs->get()->angularvelocity.speed=result+(magnitudefvec3((rhs->get()->position-rhs->get()->origin)));
+    float lhsresult = (lhs->get()->angularvelocity.speed - rhs->get()->angularvelocity.speed)+magnitudefvec3(lhs->get()->size)/((lhs->get()->mass+rhs->get()->mass));
+    float rhsresult = (lhs->get()->angularvelocity.speed - rhs->get()->angularvelocity.speed)+magnitudefvec3(rhs->get()->size)/((lhs->get()->mass+rhs->get()->mass));
+    lhs->get()->angularvelocity.speed=lhsresult+(magnitudefvec3((lhs->get()->position-lhs->get()->origin)));
+    rhs->get()->angularvelocity.speed=rhsresult+(magnitudefvec3((rhs->get()->position-rhs->get()->origin)));
+
+    auto subpos = lhs->get()->position-rhs->get()->position;
 
     lhs->get()->angularvelocity.dir= (-lhs->get()->angularvelocity.dir) * lhs->get()->origin; // Invert the direction.
     rhs->get()->angularvelocity.dir= (-rhs->get()->angularvelocity.dir) * rhs->get()->origin;
   };
+
+  /// Call this to update an object's position according to their angularvelocity if they're affected by physics at all.
+  void update_object(boost::shared_ptr<Simengine::Object> *targ, float airweight){
+        if (!targ->get()->angularvelocity.affectedbyphysics){
+            // If it's not affected by physics; return
+            return;
+        }
+
+        targ->get()->position=(targ->get()->position*targ->get()->angularvelocity.speed)/targ->get()->angularvelocity.dir;
+        targ->get()->rotation=(targ->get()->position/targ->get()->angularvelocity.dir);
+        targ->get()->angularvelocity.speed-=airweight+targ->get()->mass;
+        // check to see if the speed is below 0.0
+        if (targ->get()->angularvelocity.speed<0.0) {
+            targ->get()->angularvelocity.speed=0;
+            targ->get()->angularvelocity.dir=arma::fvec3{0.0,0.0,0.0};
+        }
+    };
 };
 };

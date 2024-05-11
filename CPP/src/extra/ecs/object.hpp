@@ -29,6 +29,7 @@ namespace Simengine {
         arma::fvec3 origin;
         arma::fvec3 position;
         arma::fvec3 rotation;
+        arma::fvec3 size;
         AngularVelocity angularvelocity;
         arma::fmat mesh;
         float mass;
