@@ -1,9 +1,15 @@
 #pragma once
-namespace Simengine {
-    struct Object;
-    struct Scene;
-    class Physics;
+#include <armadillo>
+#include <cmath>
+float magnitudefvec3(arma::fvec3 vec) {
+    return sqrtf(vec[0]*2 + vec[1]*2 + vec[2]*2);
 };
-#include "extra/scene.hpp"
+namespace Simengine {
+    static bool DEBUG = false;
+    struct Scene;
+    struct Object;
+    struct Physics;
+};
 #include "extra/ecs/object.hpp"
 #include "extra/physics/physics.hpp"
+#include "extra/scene.hpp"
