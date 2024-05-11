@@ -51,6 +51,11 @@ struct Physics {
             return;
         }
 
+        if (targ->get()->angularvelocity.speed<0) {
+            // If it's not moving then don't affect it.
+            return;
+        }
+
         targ->get()->position=(targ->get()->position*targ->get()->angularvelocity.speed)/targ->get()->angularvelocity.dir;
         targ->get()->rotation=(targ->get()->position/targ->get()->angularvelocity.dir);
         targ->get()->angularvelocity.speed-=airweight+targ->get()->mass;
