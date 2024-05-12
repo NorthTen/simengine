@@ -38,31 +38,38 @@ struct Physics {
     lhs->get()->angularvelocity.speed=lhsresult+(magnitudefvec3((lhs->get()->position-lhs->get()->origin)));
     rhs->get()->angularvelocity.speed=rhsresult+(magnitudefvec3((rhs->get()->position-rhs->get()->origin)));
 
-    auto subpos = lhs->get()->position-rhs->get()->position;
+    auto intersectionpos = lhs->get()->position-rhs->get()->position;
 
-    lhs->get()->angularvelocity.dir= (-lhs->get()->angularvelocity.dir) * lhs->get()->origin; // Invert the direction.
-    rhs->get()->angularvelocity.dir= (-rhs->get()->angularvelocity.dir) * rhs->get()->origin;
+    lhs->get()->angularvelocity.dir= (reflectvec3(lhs->get()->angularvelocity.dir,intersectionpos)) * lhs->get()->origin;
+    rhs->get()->angularvelocity.dir= (reflectvec3(rhs->get()->angularvelocity.dir,intersectionpos)) * rhs->get()->origin;
   };
+
+
 
   /// Call this to update an object's position according to their angularvelocity if they're affected by physics at all.
   void update_object(boost::shared_ptr<Simengine::Object> *targ, float airweight){
-        if (!targ->get()->angularvelocity.affectedbyphysics){
+        float targspeed = targ->get()->angularvelocity.speed;
+        AngularVelocity angvel = targ->get()->angularvelocity;
+        if (!angvel.affectedbyphysics){
             // If it's not affected by physics; return
             return;
         }
 
-        if (targ->get()->angularvelocity.speed<0) {
+        if (angvel.speed<0.0000) {
             // If it's not moving then don't affect it.
             return;
         }
 
-        targ->get()->position=(targ->get()->position*targ->get()->angularvelocity.speed)/targ->get()->angularvelocity.dir;
-        targ->get()->rotation=(targ->get()->position/targ->get()->angularvelocity.dir);
-        targ->get()->angularvelocity.speed-=airweight+targ->get()->mass;
+        arma::fvec3 targdistfromdestination = targ->get()->position-angvel.dir;
+
+        targ->get()->position=(targ->get()->position*angvel.speed)/targ->get()->position/angvel.dir;
+        targ->get()->rotation=((targ->get()->rotation*angvel.speed)/targ->get()->size/targ->get()->mass)/airweight;
+        targ->get()->angularvelocity.speed-=magnitudefvec3((targ->get()->size/targ->get()->mass)/airweight);
+
         // check to see if the speed is below 0.0
-        if (targ->get()->angularvelocity.speed<0.0) {
-            targ->get()->angularvelocity.speed=0;
-            targ->get()->angularvelocity.dir=arma::fvec3{0.0,0.0,0.0};
+        if (angvel.speed<0.0000) {
+            angvel.speed=0;
+            angvel.dir=arma::fvec3{0.0,0.0,0.0};
         }
     };
 };
