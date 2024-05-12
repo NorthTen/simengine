@@ -38,7 +38,7 @@ Simengine::Dataloaders::loadobj(std::string filepath) {
   };
 
   // convert colors to mesh.colors
-  arma::fvec3 temp;
+  arma::fvec3 temp = {0.0, 0.0, 0.0};
   bool x;
   bool y;
   bool z;
@@ -47,7 +47,7 @@ Simengine::Dataloaders::loadobj(std::string filepath) {
       x = false;
       y = false;
       z = false;
-      mesh.colors[mesh.colors.size()] = temp;
+      mesh.colors.push_back(temp);
     }
     if (x) {
       temp[1] = vertexs;
@@ -71,7 +71,7 @@ Simengine::Dataloaders::loadobj(std::string filepath) {
       x = false;
       y = false;
       z = false;
-      mesh.vertices[mesh.vertices.size()] = temp;
+      mesh.vertices.push_back(temp);
     }
     if (x) {
       temp[1] = vertexs;
@@ -95,7 +95,7 @@ Simengine::Dataloaders::loadobj(std::string filepath) {
       x = false;
       y = false;
       z = false;
-      mesh.normals[mesh.normals.size()] = temp;
+      mesh.normals.push_back(temp);
     }
     if (x) {
       temp[1] = vertexs;
@@ -118,8 +118,7 @@ Simengine::Dataloaders::loadobj(std::string filepath) {
     if (x && y) {
       x = false;
       y = false;
-      mesh.texturecoordinates[mesh.texturecoordinates.size()] = {temp[0],
-                                                                 temp[1]};
+      mesh.texturecoordinates.push_back({temp[0],temp[1]});
     }
     if (x) {
       temp[1] = vertexs;
